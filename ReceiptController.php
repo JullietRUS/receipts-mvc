@@ -29,18 +29,19 @@ class ReceiptController
 			$this->viewType = $_REQUEST['v'];
 		}
 
+		////// Current page definition
+		$p = 1;
+		if (isset($_REQUEST['p'])) {
+			$p = intval($_REQUEST['p']);
+		}
+		$this->curPage = $p > 0 ? $p : 1; // or first page
+		////// !Current page definition
+
 		if ($this->viewType === 'list') {
 
-			$p = 1;
-			if (isset($_REQUEST['p'])) {
-				$p = intval($_REQUEST['p']);
-			}
-
-			$this->curPage = $p > 0 ? $p : 1; // or first page
-
 			$offset = $this->curPage > 1 ? $quantityOnPage * $this->curPage : 0;
-
 			$this->listData = $this->Model->getList($this->itemsOnPage, $offset);
+
 		} else {
 			$this->curItemID = intval($_REQUEST['id']);
 		}
@@ -52,7 +53,7 @@ class ReceiptController
 	{
 
 		if ($this->viewType === 'list') {
-			ReceiptView::htmlList($this->listData);
+			ReceiptView::htmlList($this->listData, $this->curPage);
 
 			if ($this->itemsOnPage < $this->Model->getTotal()) {
 				$this->paging();
@@ -60,7 +61,7 @@ class ReceiptController
 		} else {
 
 			if ($item = $this->Model->getById($this->curItemID)) {
-				ReceiptView::htmlDetail($item);
+				ReceiptView::htmlDetail($item, $this->curPage);
 			}
 
 

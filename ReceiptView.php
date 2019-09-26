@@ -2,23 +2,24 @@
 
 class ReceiptView
 {
-	public static function htmlList($arItems)
+	public static function htmlList($arItems,  $CurPage)
 	{
 
 		echo '<div class="content">';
 		echo '<h1>Receipts</h1>';
 		foreach ($arItems as $key => $arItem) {
 			echo '<div class="receipt"><h2>' . $arItem->name . '</h2>' .
-					'<p><a href="?v=detail&id=' . $arItem->id . '">More</a></p></div>';
+					'<p><a href="?v=detail&id=' . $arItem->id . '&p='. $CurPage.'">More</a></p></div>';
 		}
 		echo '</div>';
 	}
 
-	public static function htmlDetail($Item)
+	public static function htmlDetail($Item, $CurPage)
 	{
 
-		echo '<div class="content">'.'<h1>' . $Item->name . '</h1>' . $Item->description .
-				' <p><a href="?v=list">Back</a></p></div>';
+		echo '<div class="content">'.'<h1>' . $Item->name . '</h1>' .
+				 '<div class="receipt-detail">'.$Item->description .'</div>'.
+				' <p><a href="?v=list&p='.$CurPage.'">Back</a></p></div>';
 	}
 
 	public static function pagingHTML($totPages, $curPage)

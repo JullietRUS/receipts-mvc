@@ -72,6 +72,8 @@ body {
 
 h1 {
     font-size: 22px;
+    font-family: Verdana, sans-serif;
+    margin-top: 20px;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -101,9 +103,23 @@ a:hover {
 
 .receipt {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     animation-duration: 1s;
     animation-name: appare;
+}
+
+.receipt h2 {
+    display: flex;
+}
+
+.receipt h2:before {
+    content: '📜';
+    font-size: 14px;
+    padding-right: 5px
+}
+
+.receipt-detail {
+    margin-bottom: 20px
 }
 
 @keyframes appare {

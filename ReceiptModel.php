@@ -18,6 +18,7 @@ class Receipt
 		$this->id = intval($id);
 	}
 
+
 }
 
 class ReceiptModel
