@@ -102,19 +102,17 @@ a:hover {
 .receipt {
     width: 100%;
     margin-bottom: 10px;
-    animation-duration: 3s;
+    animation-duration: 1s;
     animation-name: appare;
 }
 
 @keyframes appare {
     from {
-        margin-left: 100%;
-
+       opacity: 0
     }
 
     to {
-        margin-left: 0;
-
+        opacity: 1
     }
 }
 
@@ -141,7 +139,3 @@ a:hover {
     text-decoration: none;
 }
 
-
-@keyframes fadeIn {
-
-}
