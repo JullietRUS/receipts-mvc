@@ -7,19 +7,21 @@ class ReceiptView
 
 		echo '<div class="content">';
 		echo '<h1>Receipts</h1>';
-		foreach ($arItems as $key => $arItem) {
-			echo '<div class="receipt"><h2>' . $arItem->name . '</h2>' .
-					'<p><a href="?v=detail&id=' . $arItem->id . '&p='. $CurPage.'">More</a></p></div>';
+		foreach ($arItems as $arItem) {
+			echo '<div class="receipt"><h2>' . $arItem['NAME'] . '</h2>' .
+					'<p><a href="?v=detail&id=' . $arItem['ID'] . '&p='. $CurPage.'">More</a></p></div>';
 		}
 		echo '</div>';
 	}
 
 	public static function htmlDetail($Item, $CurPage)
 	{
-
-		echo '<div class="content">'.'<h1>' . $Item->name . '</h1>' .
-				 '<div class="receipt-detail">'.$Item->description .'</div>'.
-				' <p><a href="?v=list&p='.$CurPage.'">Back</a></p></div>';
+		echo '<div class="content">'.'<h1>' . $Item['NAME'] . ' </h1>' .
+				 '<div class="receipt-detail">'.
+         '<p><em>Level</em>: '.str_repeat('🍕',$Item['DIFFICULTY'] ).'</p>'.
+				 '<p><em>🧭</em>: '.$Item['TIME'].' minutes</p>'.
+				 '<p>'.$Item['DESC'] .'</p></div>'.
+				 '<p><a href="?v=list&p='.$CurPage.'">Back</a></p></div>';
 	}
 
 	public static function pagingHTML($totPages, $curPage)

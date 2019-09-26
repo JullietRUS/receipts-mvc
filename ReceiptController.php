@@ -40,7 +40,9 @@ class ReceiptController
 		if ($this->viewType === 'list') {
 
 			$offset = $this->curPage > 1 ? $quantityOnPage * $this->curPage : 0;
-			$this->listData = $this->Model->getList($this->itemsOnPage, $offset);
+			$this->listData = $this->Model->getList($offset, $this->itemsOnPage);
+
+
 
 		} else {
 			$this->curItemID = intval($_REQUEST['id']);

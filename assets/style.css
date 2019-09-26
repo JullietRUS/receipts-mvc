@@ -122,6 +122,10 @@ a:hover {
     margin-bottom: 20px
 }
 
+.receipt-detail p {
+    margin-bottom: 12px;
+}
+
 @keyframes appare {
     from {
        opacity: 0

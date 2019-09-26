@@ -1,38 +1,43 @@
 <?php
 
-class Receipt
-{
-	public $name;
-	public $id;
-	public $description;
-
-	/**
-	 * Receipt constructor.
-	 * @param $name
-	 * @param $text
-	 */
-	public function __construct($name, $text, $id)
-	{
-		$this->name = $name;
-		$this->description = htmlspecialchars($text);
-		$this->id = intval($id);
-	}
-
-
-}
-
 class ReceiptModel
 {
-	private $ListReceipts = array();
-	private $total = 50;
+
+	private $total = 30;
+	private $DB;
+	private $lastError;
 
 	function __construct()
 	{
-		for ($i = 1; $i <= $this->total; $i++) {
-			$receipt = new Receipt('Receipt ' . $i, 'Description ' . $i, $i);
-			$this->ListReceipts[] = $receipt;
+		if (!$this->DB) {
+			$this->DB = new PDO('sqlite:' . $_SERVER['DOCUMENT_ROOT'] . '/database/receipts');
+			$this->DB ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 	}
+
+	public function add($arValues)
+	{
+			$sql = 'INSERT INTO receipts (ID, NAME, DESC, DIFFICULTY, TIME, DATE_CREATE) VALUES(:ID, :NAME, :DESC, :DIFFICULTY, :TIME, :DATE_CREATE)';
+			$prepared = $this->DB->prepare($sql);
+
+			$prepared->bindParam(':ID', $arValues['ID'], PDO::PARAM_INT);
+			$prepared->bindParam(':NAME', $arValues['NAME'], PDO::PARAM_STR);
+			$prepared->bindParam(':DESC', $arValues['DESC'], PDO::PARAM_STR);
+			$prepared->bindParam(':DIFFICULTY', $arValues['DIFFICULTY'], PDO::PARAM_INT);
+			$prepared->bindParam(':TIME', $arValues['TIME'], PDO::PARAM_INT);
+			$prepared->bindParam(':DATE_CREATE', $arValues['DATE_CREATE'], PDO::PARAM_STR);
+
+			$prepared->execute();
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLastError()
+	{
+		return $this->lastError;
+	}
+
 
 	/**
 	 * @return int
@@ -42,18 +47,27 @@ class ReceiptModel
 		return $this->total;
 	}
 
-	public function getList($quantity, $offset = 0)
+	public function getList($first, $quantity)
 	{
-		return array_slice($this->ListReceipts, $offset, $quantity);
+			$sql = 'SELECT * FROM receipts ORDER BY ID LIMIT ' . $first . ',' . $quantity . ' ';
+			$prepared = $this->DB->prepare($sql);
+			$prepared->execute();
+
+			$list = array();//$prepared->fetch(PDO::FETCH_ASSOC);
+
+			while ($row = $prepared->fetch(PDO::FETCH_ASSOC)) {
+				$list[] = $row;
+			}
+
+			return $list;
 	}
 
 	public function getById($id)
 	{
-		for ($i = 0; $i < $this->total; $i++) {
-			if ($this->ListReceipts[$i]->id === $id) {
-				return $this->ListReceipts[$i];
-			}
-		}
-		return false;
+			$sql = 'SELECT * FROM receipts WHERE ID=:id';
+			$prepared = $this->DB->prepare($sql);
+			$prepared->bindParam(':id', $id, PDO::PARAM_INT);
+			$prepared->execute();
+			return $prepared->fetch(PDO::FETCH_ASSOC);
 	}
 }
